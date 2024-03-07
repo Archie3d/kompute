@@ -128,6 +128,14 @@ class Tensor
     void recordCopyFromDeviceToStaging(const vk::CommandBuffer& commandBuffer);
 
     /**
+     * Records a buffer fill with the given data value.
+     *
+     * @param commandBuffer Vulkan Command Buffer to record the commands into
+     * @param data 4-bytes value to fill the buffer with.
+     */
+    void recordFill(const vk::CommandBuffer& commandBuffer, uint32_t data);
+
+    /**
      * Records the buffer memory barrier into the primary buffer and command
      * buffer which ensures that relevant data transfers are carried out
      * correctly.
@@ -343,6 +351,16 @@ class TensorT : public Tensor
     }
 
     TensorDataTypes dataType();
+
+    void fillData(const T value)
+    {
+        T* rawData = this->data<T>();
+
+        for (size_t i = 0; i < this->size(); ++i) {
+            rawData[i] = value;
+        }
+    }
+
 };
 
 } // End namespace kp

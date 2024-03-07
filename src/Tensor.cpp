@@ -253,6 +253,16 @@ Tensor::recordCopyBuffer(const vk::CommandBuffer& commandBuffer,
 }
 
 void
+Tensor::recordFill(const vk::CommandBuffer& commandBuffer, uint32_t data)
+{
+    vk::DeviceSize bufferSize(this->memorySize());
+
+    KP_LOG_DEBUG("Kompute Tensor filling buffer of size {} with data {}.", bufferSize, data);
+
+    commandBuffer.fillBuffer(*mPrimaryBuffer, 0, bufferSize, data);
+}
+
+void
 Tensor::recordPrimaryBufferMemoryBarrier(const vk::CommandBuffer& commandBuffer,
                                          vk::AccessFlagBits srcAccessMask,
                                          vk::AccessFlagBits dstAccessMask,
