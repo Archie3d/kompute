@@ -352,6 +352,7 @@ class TensorT : public Tensor
 
     TensorDataTypes dataType();
 
+    /*
     void fillData(const T value)
     {
         T* rawData = this->data<T>();
@@ -360,7 +361,7 @@ class TensorT : public Tensor
             rawData[i] = value;
         }
     }
-
+    */
 };
 
 } // End namespace kp

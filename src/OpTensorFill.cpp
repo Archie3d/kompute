@@ -40,13 +40,13 @@ OpTensorFill::record(const vk::CommandBuffer& commandBuffer)
 }
 
 void
-OpTensorFill::preEval(const vk::CommandBuffer& commandBuffer)
+OpTensorFill::preEval(const vk::CommandBuffer& /* commandBuffer */)
 {
     KP_LOG_DEBUG("Kompute OpTensorFill preEval called");
 }
 
 void
-OpTensorFill::postEval(const vk::CommandBuffer& commandBuffer)
+OpTensorFill::postEval(const vk::CommandBuffer& /* commandBuffer */)
 {
     KP_LOG_DEBUG("Kompute OpTensorFill postEval called");
 
