@@ -90,7 +90,12 @@ Tensor::rebuild(void* data,
 
     if (this->tensorType() != Tensor::TensorTypes::eStorage) {
         this->mapRawData();
-        memcpy(this->mRawData, data, this->memorySize());
+
+        if (data) {
+            memcpy(this->mRawData, data, this->memorySize());
+        } else {
+            memset(this->mRawData, 0, this->memorySize());
+        }
     }
 }
 

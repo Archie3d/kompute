@@ -95,11 +95,35 @@ class Manager
         return tensor;
     }
 
+    template<typename T>
+    std::shared_ptr<TensorT<T>> tensorT(
+      uint32_t elementTotalCount,
+      Tensor::TensorTypes tensorType = Tensor::TensorTypes::eDevice)
+    {
+        KP_LOG_DEBUG("Kompute Manager tensor creation triggered");
+
+        std::shared_ptr<TensorT<T>> tensor{ new kp::TensorT<T>(
+          this->mPhysicalDevice, this->mDevice, elementTotalCount, tensorType) };
+
+        if (this->mManageResources) {
+            this->mManagedTensors.push_back(tensor);
+        }
+
+        return tensor;
+    }
+
     std::shared_ptr<TensorT<float>> tensor(
       const std::vector<float>& data,
       Tensor::TensorTypes tensorType = Tensor::TensorTypes::eDevice)
     {
         return this->tensorT<float>(data, tensorType);
+    }
+
+    std::shared_ptr<TensorT<float>> tensor(
+      uint32_t elementTotalCount,
+      Tensor::TensorTypes tensorType = Tensor::TensorTypes::eDevice)
+    {
+      return this->tensorT<float>(elementTotalCount, tensorType);
     }
 
     std::shared_ptr<Tensor> tensor(

@@ -325,6 +325,22 @@ class TensorT : public Tensor
                      data.size());
     }
 
+    TensorT(std::shared_ptr<vk::PhysicalDevice> physicalDevice,
+            std::shared_ptr<vk::Device> device,
+            uint32_t elementTotalCount,
+            const TensorTypes& tensorType = TensorTypes::eDevice)
+      : Tensor(physicalDevice,
+               device,
+               nullptr,
+               elementTotalCount,
+               sizeof(T),
+               this->dataType(),
+               tensorType)
+    {
+        KP_LOG_DEBUG("Kompute TensorT constructor with data size {}",
+                     data.size());
+    }
+
     ~TensorT() { KP_LOG_DEBUG("Kompute TensorT destructor"); }
 
     T* data() { return (T*)this->mRawData; }
@@ -351,17 +367,6 @@ class TensorT : public Tensor
     }
 
     TensorDataTypes dataType();
-
-    /*
-    void fillData(const T value)
-    {
-        T* rawData = this->data<T>();
-
-        for (size_t i = 0; i < this->size(); ++i) {
-            rawData[i] = value;
-        }
-    }
-    */
 };
 
 } // End namespace kp
