@@ -338,7 +338,7 @@ class TensorT : public Tensor
                tensorType)
     {
         KP_LOG_DEBUG("Kompute TensorT constructor with data size {}",
-                     data.size());
+                     elementTotalCount);
     }
 
     ~TensorT() { KP_LOG_DEBUG("Kompute TensorT destructor"); }
