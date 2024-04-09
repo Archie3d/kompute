@@ -253,6 +253,14 @@ class Tensor
         return { (T*)this->mRawData, ((T*)this->mRawData) + this->size() };
     }
 
+    /**
+     * Indicates that this tensor is 'transient' - produced by one algorithm and consumed
+     * by another one (unlike non-transient tensors that are either copied from the host,
+     * or to the host as result of pipeline evaluation). 
+     */
+    bool isTransient() const { return transient; }
+    void setTransient(bool shouldBeTransient) { transient = shouldBeTransient; }
+
   protected:
     // -------------- ALWAYS OWNED RESOURCES
     TensorTypes mTensorType;
@@ -260,6 +268,7 @@ class Tensor
     uint32_t mSize;
     uint32_t mDataTypeMemorySize;
     void* mRawData;
+    bool transient{};
 
   private:
     // -------------- NEVER OWNED RESOURCES

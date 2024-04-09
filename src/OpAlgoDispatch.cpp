@@ -20,21 +20,29 @@ OpAlgoDispatch::record(const vk::CommandBuffer& commandBuffer)
     KP_LOG_DEBUG("Kompute OpAlgoDispatch record called");
 
     // Barrier to ensure the data is finished writing to buffer memory
-    for (const std::shared_ptr<Tensor>& tensor :
-         this->mAlgorithm->getTensors()) {
-        tensor->recordPrimaryBufferMemoryBarrier(
-          commandBuffer,
-          vk::AccessFlagBits::eTransferWrite,
-          vk::AccessFlagBits::eShaderRead,
-          vk::PipelineStageFlagBits::eTransfer,
-          vk::PipelineStageFlagBits::eComputeShader);
+    for (const std::shared_ptr<Tensor>& tensor : this->mAlgorithm->getInputTensors()) {
+        if (tensor->isTransient()) {
+            tensor->recordPrimaryBufferMemoryBarrier(
+                commandBuffer,
+                vk::AccessFlagBits::eShaderWrite,
+                vk::AccessFlagBits::eShaderRead,
+                vk::PipelineStageFlagBits::eComputeShader,
+                vk::PipelineStageFlagBits::eComputeShader);
+        } else {
+            tensor->recordPrimaryBufferMemoryBarrier(
+                commandBuffer,
+                vk::AccessFlagBits::eTransferWrite,
+                vk::AccessFlagBits::eShaderRead,
+                vk::PipelineStageFlagBits::eTransfer,
+                vk::PipelineStageFlagBits::eComputeShader);
+        }
     }
 
     if (this->mPushConstantsSize) {
         this->mAlgorithm->setPushConstants(
-          this->mPushConstantsData,
-          this->mPushConstantsSize,
-          this->mPushConstantsDataTypeMemorySize);
+            this->mPushConstantsData,
+            this->mPushConstantsSize,
+            this->mPushConstantsDataTypeMemorySize);
     }
 
     this->mAlgorithm->recordBindCore(commandBuffer);

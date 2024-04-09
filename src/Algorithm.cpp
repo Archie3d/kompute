@@ -403,4 +403,22 @@ Algorithm::getTensors()
     return this->mTensors;
 }
 
+std::vector<std::shared_ptr<Tensor>> Algorithm::getInputTensors()
+{
+    std::vector<std::shared_ptr<Tensor>> inputTensors{};
+
+    for (auto index : this->mInputTensorIndices) {
+        if (index < this->mTensors.size()) {
+            inputTensors.push_back(this->mTensors[index]);
+        }
+    }
+
+    return inputTensors;
+}
+
+void Algorithm::setInputTensorIndices(std::initializer_list<size_t> indices)
+{
+    this->mInputTensorIndices = std::vector<size_t>{ indices };
+}
+
 }

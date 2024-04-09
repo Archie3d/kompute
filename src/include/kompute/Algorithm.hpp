@@ -52,6 +52,12 @@ class Algorithm
               "spirv size: {}",
               tensors.size(),
               spirv.size());
+
+            // Assume all the tensors are input tensors for now
+            for (size_t i = 0; i < tensors.size(); ++i) {
+                this->mInputTensorIndices.push_back(i);
+            }
+
             this->rebuild(tensors,
                           spirv,
                           workgroup,
@@ -273,6 +279,13 @@ class Algorithm
      */
     const std::vector<std::shared_ptr<Tensor>>& getTensors();
 
+    /**
+     * Gets the tensors flagged as 'input' to this algorithm 
+     */
+    std::vector<std::shared_ptr<Tensor>> getInputTensors();
+
+    void setInputTensorIndices(std::initializer_list<size_t> indices);
+
     void destroy();
 
   private:
@@ -305,6 +318,8 @@ class Algorithm
     uint32_t mPushConstantsDataTypeMemorySize = 0;
     uint32_t mPushConstantsSize = 0;
     Workgroup mWorkgroup;
+
+    std::vector<size_t> mInputTensorIndices{};
 
     // Create util functions
     void createShaderModule();
